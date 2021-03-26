@@ -140,7 +140,6 @@ class Stock {
 
         $money =  (int)$stmt->get_result()->fetch_array(MYSQLI_ASSOC)['money'];
 
-        $reachedThreshold = false;
         foreach ($allSells as $sell) {
 
             if ($sell['price'] > $this->pricePerOne && isset($this->pricePerOne) && $sum < $this->number) {
@@ -148,7 +147,6 @@ class Stock {
                     http_response_code(200);
                     die(json_encode(array('message' => 'There are not enough stocks available without exceeding price per one threshold.', 'success' => false)));
                 }
-                $reachedThreshold = true;
                 break;
             }
             if ($sum + $sell['number'] >= $this->number) {
@@ -190,7 +188,7 @@ class Stock {
 
                 if (!$stmt->execute()) {
                     http_response_code(500);
-                    die(json_encode(array('message' => 'Unknown internal server error. Possibly messed some important things up. Nothing to be concerned about.2', 'success' => false)));
+                    die(json_encode(array('message' => 'Unknown internal server error. Possibly messed some important things up. Nothing to be concerned about.', 'success' => false)));
                 }
 
             }
@@ -208,7 +206,7 @@ class Stock {
 
                 if (!$stmt->execute()) {
                     http_response_code(500);
-                    die(json_encode(array('message' => 'Unknown internal server error. Possibly messed some important things up. Nothing to be concerned about.2', 'success' => false)));
+                    die(json_encode(array('message' => 'Unknown internal server error. Possibly messed some important things up. Nothing to be concerned about.', 'success' => false)));
                 }
             }
 

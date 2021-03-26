@@ -26,6 +26,15 @@ class Token {
             die(json_encode(array('message' => 'Token generation failed: no TOKEN_TTL', 'success' => false)));
         }
 
+        //delete outdated tokens
+        $stmt = $this->connection->prepare('DELETE FROM `tokens` WHERE expiry_date < ?');
+
+        $now =  date('Y-m-d H:i:s')
+
+        $stmt->bind_param('s', $now);
+
+        $stmt->execute();
+
         $token =  random_bytes(64);
         $this->token = bin2hex($token);
         $this->expires = date('Y-m-d H:i:s', time() + $_ENV['TOKEN_TTL']);

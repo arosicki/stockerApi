@@ -24,13 +24,13 @@ $dataEmpty = (empty($data->username) || empty($data->password));
 
 if($dataEmpty) {
     http_response_code(400);
-    die(json_encode(array('message' => 'Unable change password. Data is incomplete.', 'success' => false)));
+    die(json_encode(array('message' => 'Unable delete account. Data is incomplete.', 'success' => false)));
 }
 
 $user = new User($dbConnection, $data->username, $data->password);
 if (!$user->logIn()) {
     http_response_code(200);
-    die(json_encode(array('message' => 'Wrong username or password.', 'success' => false)));
+    die(json_encode(array('message' => 'Wrong password.', 'success' => false)));
 }
 while (!$user->delete()) {
     $user->sellAllStocksAsAnonymous();
