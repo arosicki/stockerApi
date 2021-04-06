@@ -36,7 +36,7 @@ if (!$token->validate()) {
     die(json_encode(array('message' => 'Incorrect token or username.', 'success' => false)));
 }
 
-$stock = new Stock($dbConnection, null, null, $data->username, null, null, $data->id);
+$stock = new Stock($dbConnection, null, null, $data->username, null, null, (int) $data->id);
 
 if (!$stock->cancelSell()) {
     http_response_code(500);

@@ -263,7 +263,7 @@ class Stock {
         $iteration = 0;
         $numberToDelete = $this->number;
         while ($numberToDelete > 0) {
-            if ($allOwnerships[$iteration]['number'] < $numberToDelete) {
+            if ($allOwnerships[$iteration]['number'] <= $numberToDelete) {
 
                 $numberToDelete -= $allOwnerships[$iteration]['number'];
 
@@ -305,12 +305,12 @@ class Stock {
             die(json_encode(array('message' => 'Unknown internal server error.', 'success' => false)));
         }
 
-        if (!$stmt->get_result()->fetch_array(MYSQLI_ASSOC)) {
+        $result = $stmt->get_result()->fetch_array(MYSQLI_ASSOC);
+
+        if (!$result) {
             http_response_code(200);
             die(json_encode(array('message' => 'Error while deleting sell. Are you sure that you passed correct id?', 'success' => false)));
         }
-
-        $result = $stmt->get_result()->fetch_array(MYSQLI_ASSOC);
 
         $stmt = $this->connection->prepare('DELETE FROM sells WHERE id=? AND USERNAME=?');
 

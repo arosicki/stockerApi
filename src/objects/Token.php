@@ -17,10 +17,11 @@ class Token {
         private mysqli $connection,
         private string $username,
         private string $token = ''
-    ) { }
+    ) {
+        date_default_timezone_set("UTC");
+    }
 
     public function generate(): bool {
-
 
         if (empty($_ENV['TOKEN_TTL'])) {
             die(json_encode(array('message' => 'Token generation failed: no TOKEN_TTL', 'success' => false)));
@@ -29,7 +30,7 @@ class Token {
         //delete outdated tokens
         $stmt = $this->connection->prepare('DELETE FROM `tokens` WHERE expiry_date < ?');
 
-        $now =  date('Y-m-d H:i:s')
+        $now =  date('Y-m-d H:i:s');
 
         $stmt->bind_param('s', $now);
 
@@ -38,7 +39,6 @@ class Token {
         $token =  random_bytes(64);
         $this->token = bin2hex($token);
         $this->expires = date('Y-m-d H:i:s', time() + $_ENV['TOKEN_TTL']);
-
         $tokenHash = password_hash( $this->token, PASSWORD_BCRYPT);
 
         $stmt = $this->connection->prepare('INSERT INTO tokens ( username, token, expiry_date ) VALUES ( ?, ?, ? )');

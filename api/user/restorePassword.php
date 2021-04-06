@@ -31,4 +31,4 @@ if(!$user->restorePassword()) {
 
 }
 http_response_code(200);
-echo json_encode(array('New Password' => $user->getPassword(), 'success' => true));
+echo json_encode(array('NewPassword' => $user->getPassword(), 'success' => true));
